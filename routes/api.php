@@ -35,4 +35,5 @@ Route::group(['middleware' => ['apiJwt']],function(){
 	});
 
 	Route::post('auth/logout', 'AuthController@logout');
+	Route::post('auth/refresh', 'AuthController@refresh');
 });
