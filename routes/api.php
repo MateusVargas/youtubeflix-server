@@ -19,9 +19,9 @@ use Illuminate\Support\Facades\Route;
 });*/
 
 Route::post('auth/login', 'AuthController@login');
+Route::post('auth/refresh', 'AuthController@refresh');
 
 Route::post('user/create', 'UserController@store');
-
 
 Route::group(['middleware' => ['apiJwt']],function(){
 	Route::prefix('categorias')->group(function(){
@@ -35,5 +35,5 @@ Route::group(['middleware' => ['apiJwt']],function(){
 	});
 
 	Route::post('auth/logout', 'AuthController@logout');
-	Route::post('auth/refresh', 'AuthController@refresh');
+	Route::get('auth/me', 'AuthController@me');
 });
