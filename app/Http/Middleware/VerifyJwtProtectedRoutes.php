@@ -21,13 +21,13 @@ class VerifyJwtProtectedRoutes extends BaseMiddleware
             $user = JWTAuth::parseToken()->authenticate();
         }catch(\Exception $e){
             if($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException){
-                return response()->json(['status' => 'token is invalid'],401);
+                return response()->json(['status' => 'token is invalid'],403);
             }
             else if($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException){
                 return response()->json(['status' => 'token is expired'],401);
             }
             else{
-                return response()->json(['status' => 'authorization token not found'],401);
+                return response()->json(['status' => 'authorization token not found'],400);
             }
         }
         
