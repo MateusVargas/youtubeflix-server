@@ -10,7 +10,7 @@ class CategoriaController extends Controller
 {
     public function index()
     {
-    	$categorias = Categoria::where('user_id',auth('api')->user()->id);
+    	$categorias = Categoria::where('user_id',auth('api')->user()->id)->get();
     	return response()->json($categorias,200);
     }
 
