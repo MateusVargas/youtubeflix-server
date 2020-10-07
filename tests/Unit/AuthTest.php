@@ -26,6 +26,28 @@ class AuthTest extends TestCase
         ]);
     }
 
+    public function test_login_incorrect_password()
+    {
+        $this->withoutExceptionHandling();
+
+        $data = ['email' => 'joao@joao', 'password' => '12345'];
+
+        $response = $this->postJson('auth/login',$data);
+
+        $response->assertStatus(404);
+    }
+
+    public function test_login_incorrect_email()
+    {
+        $this->withoutExceptionHandling();
+
+        $data = ['email' => 'joao222@joao', 'password' => '1234'];
+
+        $response = $this->postJson('auth/login',$data);
+
+        $response->assertStatus(404);
+    }
+
     public function test_logout()
     {
         $user = User::where('email', 'joao@joao')->first();
@@ -33,7 +55,7 @@ class AuthTest extends TestCase
 
         $response = $this->postJson("auth/logout?token=" . $token, []);
 
-        $response->assertStatus(204)
+        $response->assertStatus(200)
         ->assertExactJson(['message' => 'Successfully logged out']);
             //dd($token);
     }
@@ -49,6 +71,20 @@ class AuthTest extends TestCase
 
         $response->assertStatus(200)->assertJsonStructure([
             'user', 'access_token', 'token_type', 'expires_in'
+        ]);
+    }
+
+    public function test_me()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = User::where('email', 'joao@joao')->first();
+        $token = JWTAuth::fromUser($user);
+
+        $response = $this->getJson("auth/me?token=" . $token, []);
+
+        $response->assertStatus(200)->assertJsonStructure([
+            'id', 'email', 'created_at', 'updated_at'
         ]);
     }
 }
